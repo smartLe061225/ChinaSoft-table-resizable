@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+</head>
+<body>
+	<div class="easyui-resizable" data-options="minWidth:50,minHeight:50" style="width:200px;height:150px;border:1px solid #ccc;"></div>
+
+	<div id="resize" style="width:200px;height:150px;border:1px solid #ccc;"></div>
+	<script>
+		$("#resize").resizable({
+			maxWidth:800,
+			maxHeight:600
+		})
+	</script>
+
+
+	<table border="1">
+         <colgroup>
+            <col id="red" style="background-color:red">
+            <col id="lime" style="background-color:lime">
+            <col id="yellow" style="background-color:yellow">
+        </colgroup>
+        <tr>
+        	<th>ISBN</th>
+        	<th>Title</th>
+        	<th>Price</th>
+        </tr>
+        <tr>
+        	<td>3476896</td>
+        	<td>My first HTML</td>
+        	<td>$53</td>
+        </tr>
+        <tr>
+        	<td>5869207</td>
+        	<td>My first CSS</td>
+        	<td>$49</td>
+        </tr>
+        <tr>
+        	<td>6843697</td>
+        	<td>My first JS</td>
+        	<td>$68</td>
+        </tr>
+    </table>
+
+	<script>
+		$("#red").resizable({
+			maxWidth:800,
+			maxHeight:600
+		})
+		$("#lime").resizable({
+			maxWidth:800,
+			maxHeight:600
+		})
+		$("#yellow").resizable({
+			maxWidth:800,
+			maxHeight:600
+		})
+	</script>
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+<!-- disabled
+handles
+minWidth
+minHeight
+maxWidth
+maxHeight
+edge
+
+
+onStartResize
+onResize
+onStopResize
+
+
+options
+enable
+disable -->
