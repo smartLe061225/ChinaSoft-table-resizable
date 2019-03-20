@@ -1,0 +1,287 @@
+参考：
+说说localStorage
+https://www.cnblogs.com/jinguangguo/p/4083919.html
+
+
+说说localStorage和sessionStorage
+
+
+使用：
+HTML5的本地存储是大势所趋，本地存储是window的属性，包括localStorage和sessionStorage，二者用法完全相同，在使用时，首先应检测浏览器是否支持本地存储。
+
+if(window.localStorage){
+    alert('This browser supports localStorage');
+}else{
+    alert('This browser does NOT support localStorage');
+}
+其语法如下：
+window.localStorage.setItem('temp1','hello');//设置
+window.localStorage.temp2='hello';
+window.localStorage[temp3]='hello';
+var temp1_value=window.localStorage.getItem('temp1');//获取
+var temp2_value=window.localStorage.temp2;
+var temp3_value=window.localStorage[temp3];
+localStorage.removeItem('temp1');//删除
+localStorage.clear();//一次性清除所有的本地缓存
+另外，HTML5还提供了一个key()方法，可在不知道有哪些键值的时候使用，如下：
+var storage=window.localStorage;
+function showStorage(){
+    for(var i=0;i<storage.length;i++){        
+        document.write(storage.key(i)+ ":"+storage.getItem(storage.key(i))+"<br>");//key(i)获得相应的键，再用getItem()方法获得对应的值
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1、存储格式：仅仅存储字符串类型的对象(虽然规范中可存储其他原生类型的对象，但目前为止还没有浏览器对其进行实现)。
+实例：
+var obj1={'name':'Alex'};
+var obj2=JSON.stringify({'name':'Alex'});
+
+window.localStorage.setItem('temp1',obj1);
+window.localStorage.setItem('temp2',obj2);
+
+console.log(temp1);//报错
+console.log(temp2);//报错
+
+var temp3=window.localStorage.getItem('temp1');
+var temp4=window.localStorage.getItem('temp2');
+
+console.log(temp3);//"[object Object]"
+console.log(typeof temp3);//"string"
+console.log(temp4);//"{"name":"Alex"}"
+console.log(typeof temp4);//"string"
+
+console.log(JSON.parse(temp3));//报错
+console.log(JSON.parse(temp4));//{name: "Alex"}
+结论：当存储对象前，应先使用JSON.stringify(obj)将对象转化为字符串，并且在获取对象后，应先使用JSON.parse(obj)将字符串转化为对象。
+
+
+
+
+
+
+
+
+
+2、存储大小
+对HTML5的localStorage而言，其大小支持为5M(当然，各浏览器的大小还是有差异的，有的浏览器还可让用户设置)。对于IE的userData，用户数据的每个域最大为64KB。
+
+3、生命周期：在数据存储的时效性上，localStorage并不会像cookie那样可设置数据存活的时限。即只要用户不主动删除，localStorage存储的数据将会永久存在本地。sessionStorage只是伴随着session，窗口一旦关闭，则存储的数据就没有了。
+
+4、存储位置：localStorage数据的存储位置在：本地文件系统中的，对chrome而言，localStorage数据的存储位置在：C:\Users\{userName}\AppData\Local\Google\Chrome\User Data\Default\Local Storage中。对其他4大浏览器，可自行查找进行查看。sessionStorage存储在内存中(会随着浏览器的关闭而消失)。
+
+5、数据共享：不同浏览器无法共享localStorage或sessionStorage中的信息。相同浏览器的不同页面间及标签页可共享相同的localStorage的信息(页面属于相同域名和端口)，但无法共享sessionStorage的信息。
+注：这里的页面及标签页仅指顶级窗口，若一个标签页包含多个iframe标签且它们属于同源页面，则它们之间可共享sessionStorage。
+
+6、应用场景
+虽然通常可通过xss漏洞来获取到Cookie，然后用这个Cookie进行身份验证登录，但是浏览器可通过HttpOnly来保护Cookie不被XSS攻击获取到。而localStorage存储未对XSS攻击有任何防御机制，一旦出现XSS漏洞，则存储在localStorage里的数据就极易被获取到。因而建议不要使用localStorage方式存储敏感信息，哪怕这些信息进行过加密。另外，对身份验证数据使用localStorage进行存储还不太成熟。
+
+7、兼容性
+图片：https://pic002.cnblogs.com/images/2012/422834/2012070316413785.jpg
+除IE8.0以下不支持localStorage或sessionStorage外，其他浏览器很早的版本均支持localStorage，对低版本系列IE的浏览器，需采用一个兼容方案来处理(微软在IE5.0后自定义了一种持久化用户数据的概念userData)。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+HTML5 LocalStorage 本地存储
+
+
+本地存储是历尽千辛万苦才走到HTML5这一步，之前的历史大概如下图所示：
+
+ 
+
+
+
+Cookies
+缺点：主要是太小，约4KB，而且IE6只支持每个域名20个cookies，太少了。
+有点：基本上所有的浏览器均能很好的支持，很早以前那些禁用cookies的用户也均慢慢的不存在了，就好像以前禁用javascript的用户不存在了一样。
+
+
+userData是IE的东西，垃圾。
+
+
+现在用的最多的是Flash，空间是Cookie的25倍，基本够用。
+再之后Google推出了Gears，虽然没有限制，但不好的地方是要装额外的插件（没具体研究过）。
+
+
+
+
+ 
+
+ 
+
+
+
+
+
+写一个最简单的，利用本地存储的计数器：
+
+var storage=window.localStorage;
+if(!storage.getItem("pageLoadCount"))
+    storage.setItem("pageLoadCount",0);
+storage.pageLoadCount=parseInt(storage.getItem("pageLoadCount"))+1;//必须格式转换
+document.getElementById("count").innerHTML=storage.pageLoadCount;
+showStorage();
+
+不断刷新就能看到数字在一点点上涨，如下图所示：
+
+ 
+
+需要注意的是，HTML5本地存储只能存字符串，任何格式存储的时候都会被自动转为字符串，所以读取的时候，需要自己进行类型的转换。这也就是上一段代码中parseInt必须要使用的原因。
+
+ 
+
+另外，在iPhone/iPad上有时设置setItem()时会出现诡异的QUOTA_EXCEEDED_ERR错误，这时一般在setItem之前，先removeItem()就ok了。
+
+ 
+
+HTML5的本地存储，还提供了一个storage事件，可以对键值对的改变进行监听，使用方法如下：
+
+if(window.addEventListener){
+ window.addEventListener("storage",handle_storage,false);
+}else if(window.attachEvent){
+ window.attachEvent("onstorage",handle_storage);
+}
+function handle_storage(e){
+ if(!e){e=window.event;}
+ //showStorage();
+}
+
+ 
+
+对于事件变量e，是一个StorageEvent对象，提供了一些实用的属性，可以很好的观察键值对的变化，如下表：
+
+ Property
+
+ Type
+
+ Description
+
+ key
+
+ String
+
+ The named key that was added, removed, or moddified
+
+ oldValue
+
+ Any
+
+ The previous value(now overwritten), or null if a new item was added
+
+ newValue
+
+ Any
+
+ The new value, or null if an item was added
+
+ url/uri
+
+ String
+
+ The page that called the method that triggered this change
+
+ 
+
+这里添加两个键值对a和b，并增加一个按钮。给a设置固定的值，当点击按钮时，修改b的值：
+
+<body>
+<p>You have viewed this page <span id="count">0</span>  time(s).</p>
+<p><input type="button" value="changeStorage" onClick="changeS()"/></p>
+<script>
+var storage = window.localStorage;
+if (!storage.getItem("pageLoadCount")) storage.setItem("pageLoadCount",0);
+storage.pageLoadCount = parseInt(storage.getItem("pageLoadCount")) + 1;//必须格式转换
+document.getElementByIdx_x("count").innerHTML = storage.pageLoadCount;
+showStorage();
+if(window.addEventListener){
+ window.addEventListener("storage",handle_storage,false);
+}else if(window.attachEvent){
+ window.attachEvent("onstorage",handle_storage);
+}
+function handle_storage(e){
+ if(!e){e=window.event;}
+ showObject(e);
+}
+function showObject(obj){
+ //递归显示object
+ if(!obj){return;}
+ for(var i in obj){
+  if(typeof(obj[i])!="object" || obj[i]==null){
+   document.write(i + " : " + obj[i] + "<br/>");
+  }else{
+   document.write(i + " : object" + "<br/>");
+  }
+ }
+}
+storage.setItem("a",5);
+function changeS(){
+ //修改一个键值，测试storage事件
+ if(!storage.getItem("b")){storage.setItem("b",0);}
+ storage.setItem('b',parseInt(storage.getItem('b'))+1);
+}
+function showStorage(){
+ //循环显示localStorage里的键值对
+ for(var i=0;i<storage.length;i++){
+  //key(i)获得相应的键，再用getItem()方法获得对应的值
+  document.write(storage.key(i)+ " : " + storage.getItem(storage.key(i)) + "<br>");
+ }
+}
+</script>
+</body>
+
+ 
+
+测试发现，目前浏览器对这个支持不太好，仅iPad和Firefox支持，而且Firefox支持得乱糟糟，e对象根本没有那些属性。iPad支持非常好，用的是e.uri（不是e.url），台式机上的Safari不行，诡异。
+
+ 
+
+目前浏览器都带有很好的开发者调试功能，下面分别是Chrome和Firefox的调试工具查看LocalStorage：
+
+ 
+
+
+
+另外，目前javascript使用非常多的json格式，如果希望存储在本地，可以直接调用JSON.stringify()将其转为字符串。读取出来后调用JSON.parse()将字符串转为json格式，如下所示：
+
+var details = {author:"isaac","description":"fresheggs","rating":100};
+storage.setItem("details",JSON.stringify(details));
+details = JSON.parse(storage.getItem("details"));
+
+ 
+
+JSON对象在支持localStorage的浏览器上基本都支持，需要注意的是IE8，它支持JSON，但如果添加了如下的兼容模式代码，切到IE7模式就不行了（此时依然支持localStorage，虽然显示window.localStorage是[object]，而不是之前的[object Storage]，但测试发现getItem()、setItem()等均能使用）。
+
+<meta content="IE=7" http-equiv="X-UA-Compatible"/>
+
+ 
+
+经验在于积累----小伟

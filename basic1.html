@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+</head>
+<body>
+	<div class="easyui-resizable" data-options="minWidth:50,minHeight:50,handles:'e',onStopResize:showWidth(this)" style="width:200px;height:150px;border:1px solid #ccc;"></div>
+
+	<div id="resize" style="width:200px;height:150px;border:1px solid #ccc;"></div>
+	<script>
+		function showWidth(that){
+			console.log(this);//window
+			console.log(that);//window
+		}
+		$("#resize").resizable({
+			maxWidth:800,
+			maxHeight:600,
+			handles:"e",
+			onStopResize:function(){
+				console.log(this.style.width);
+			}
+		})
+	</script>
+
+
+	<table border="1">
+         <colgroup>
+            <col style="background-color:red">
+            <col style="background-color:lime">
+            <col style="background-color:yellow">
+        </colgroup>
+        <tr>
+        	<th id="red">ISBN</th>
+        	<th id="lime">Title</th>
+        	<th id="yellow">Price</th>
+        </tr>
+        <tr>
+        	<td>3476896</td>
+        	<td>My first HTML</td>
+        	<td>$53</td>
+        </tr>
+        <tr>
+        	<td>5869207</td>
+        	<td>My first CSS</td>
+        	<td>$49</td>
+        </tr>
+        <tr>
+        	<td>6843697</td>
+        	<td>My first JS</td>
+        	<td>$68</td>
+        </tr>
+    </table>
+
+	<script>
+		$("#red").resizable({
+			maxWidth:800,
+			maxHeight:600,
+			handles:"e",
+			onStopResize:function(){
+				console.log(this.style.width)
+			}
+
+		})
+		$("#lime").resizable({
+			maxWidth:800,
+			maxHeight:600,
+			handles:"e"
+		})
+		$("#yellow").resizable({
+			maxWidth:800,
+			maxHeight:600,
+			handles:"e"
+		})
+	</script>
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+<!-- disabled
+handles
+minWidth
+minHeight
+maxWidth
+maxHeight
+edge
+
+
+onStartResize
+onResize
+onStopResize
+
+
+options
+enable
+disable -->
